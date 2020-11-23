@@ -1,12 +1,8 @@
 # -*- coding: UTF-8 -*-
-# from sqlalchemy import Column, Integer, String, Table
-# from sqlalchemy.orm import mapper
-# from data_metrics.database import metadata, db_session
 from . import db
 
 
 class Users(db.Model):
-    # query = db_session.query_property()
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
@@ -20,9 +16,22 @@ class Users(db.Model):
         return '<User %r>' % self.name
 
 
-# users = Table('users', metadata,
-#               Column('id', Integer, primary_key=True),
-#               Column('name', String(50), unique=True),
-#               Column('email', String(120), unique=True),
-#               autoload=True
-#               )
+class EventCount(db.Model):
+
+    __bind_key__ = 'ga'
+    __tablename__ = 'ga_event_count'
+
+    day = db.Column(db.DATE, primary_key=True)
+    project_id = db.Column(db.String(10), primary_key=True)
+    event_id = db.Column(db.String(255), primary_key=True)
+    counts = db.Column(db.Integer)
+    users = db.Column(db.Integer)
+    avg_counts = db.Column(db.FLOAT)
+
+    def __init__(self, day=None, project_id=None, event_id=None, counts=None, users=None, avg_counts=None):
+        self.day = day
+        self.project_id = project_id
+        self.event_id = event_id
+        self.counts = counts
+        self.users = users
+        self.avg_counts = avg_counts
